@@ -38,6 +38,6 @@ fn main() {
 
 fn create_file(directory_path: PathBuf) -> Result<(), Error> {
     let directory_name = directory_path.join(".ksync");
-    let mut _directory = fs::create_dir(directory_name)?;
+    fs::create_dir(directory_name)?;
     Ok(())
 }
