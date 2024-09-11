@@ -1,6 +1,7 @@
 use clap::{CommandFactory, Parser, Subcommand};
 use std::fs;
-use std::{io::Error, path::PathBuf};
+
+const INIT_DIR_NAME: &str = ".ksync";
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -20,7 +21,7 @@ fn main() {
     match args.command {
         Some(Commands::Init {}) => {
             if let Ok(current_dir) = std::env::current_dir() {
-                match create_file(current_dir) {
+                match fs::create_dir(current_dir.join(INIT_DIR_NAME)) {
                     Ok(()) => println!("ksync directory initiated"),
                     Err(ref e) if e.kind() == std::io::ErrorKind::AlreadyExists => {
                         eprintln!("ksync already initialized")
@@ -34,10 +35,4 @@ fn main() {
             println!();
         }
     }
-}
-
-fn create_file(directory_path: PathBuf) -> Result<(), Error> {
-    let directory_name = directory_path.join(".ksync");
-    fs::create_dir(directory_name)?;
-    Ok(())
 }
