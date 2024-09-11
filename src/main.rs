@@ -1,5 +1,8 @@
 use clap::{CommandFactory, Parser, Subcommand};
+use config::Configurations;
 use std::fs;
+
+mod config;
 
 const INIT_DIR_NAME: &str = ".ksync";
 
@@ -13,6 +16,7 @@ struct Args {
 #[derive(Subcommand, Debug)]
 enum Commands {
     Init {},
+    New { bucket: String },
 }
 
 fn main() {
@@ -30,9 +34,22 @@ fn main() {
                 };
             }
         }
+        Some(Commands::New { bucket }) => {
+            if let Ok(cfgs) = initalized() {
+                println!("{bucket} passed with {:?}.", cfgs);
+            } else {
+                println!("error: ksync not initalized.")
+            }
+        }
         None => {
             Args::command().print_help().unwrap();
             println!();
         }
     }
+}
+
+/// Check for .ksync directory.
+fn initalized() -> Result<Configurations, std::io::Error> {
+    fs::read_dir(INIT_DIR_NAME)?;
+    Ok(Configurations::default())
 }
