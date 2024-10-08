@@ -1,2 +1,2 @@
-pub mod config_object;
 pub mod config_builder;
+pub mod config_object;
