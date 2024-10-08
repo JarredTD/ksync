@@ -4,4 +4,5 @@ use clap::Subcommand;
 pub enum Commands {
     Init {},
     New { bucket: String },
+    Config { key: String, value: String },
 }

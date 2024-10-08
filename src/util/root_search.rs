@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use crate::constants::INIT_DIR_NAME;
 
-pub fn find_root(dir: &Path) -> Result<PathBuf, std::io::Error> {
+pub fn find_ksync_root(dir: &Path) -> Result<PathBuf, std::io::Error> {
     let entries = read_dir(dir)?;
 
     for entry in entries {
@@ -13,14 +13,12 @@ pub fn find_root(dir: &Path) -> Result<PathBuf, std::io::Error> {
             Err(_) => continue,
         };
 
-        if entry.file_type()?.is_dir() {
-            if entry.file_name() == INIT_DIR_NAME {
-                return Ok(entry.path());
-            }
+        if entry.file_type()?.is_dir() && entry.file_name() == INIT_DIR_NAME {
+            return Ok(entry.path());
         }
     }
     match dir.parent() {
-        Some(parent) => find_root(parent),
+        Some(parent) => find_ksync_root(parent),
         None => Err(io::Error::new(
             io::ErrorKind::NotFound,
             "no parent directory",

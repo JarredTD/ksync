@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use url::Url;
 
-use super::config::Config;
+use super::config_object::Config;
 pub struct ConfigBuilder {
     credentials_file: Option<PathBuf>,
     profile: Option<String>,
